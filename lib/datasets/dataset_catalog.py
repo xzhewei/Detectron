@@ -37,6 +37,24 @@ RAW_DIR = 'raw_dir'
 
 # Available datasets
 DATASETS = {
+    'caltech_train_1x':{
+        IM_DIR:
+            _DATA_DIR + '/caltech/caltech_train',
+        ANN_FN:
+            _DATA_DIR + '/caltech/annotations/caltech_train_1x.json',
+    },
+    'caltech_train_10x':{
+        IM_DIR:
+            _DATA_DIR + '/caltech/caltech_train',
+        ANN_FN:
+            _DATA_DIR + '/caltech/annotations/caltech_train_10x.json',
+    },
+    'caltech_test_1x':{
+        IM_DIR:
+            _DATA_DIR + '/caltech/caltech_test',
+        ANN_FN:
+            _DATA_DIR + '/caltech/annotations/caltech_test_1x.json',
+    },
     'cityscapes_fine_instanceonly_seg_train': {
         IM_DIR:
             _DATA_DIR + '/cityscapes/images',
