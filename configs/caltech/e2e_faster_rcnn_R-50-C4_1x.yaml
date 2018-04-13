@@ -19,7 +19,7 @@ FAST_RCNN:
   ROI_XFORM_METHOD: RoIAlign
 TRAIN:
   WEIGHTS: https://s3-us-west-2.amazonaws.com/detectron/ImageNetPretrained/MSRA/R-50.pkl
-  DATASETS: ('caltech_train_1x',)
+  DATASETS: ('caltech_train_10x',)
   IMS_PER_BATCH: 1
   BATCH_SIZE_PER_IM: 128
   RPN_BATCH_SIZE_PER_IM: 256
