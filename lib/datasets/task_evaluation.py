@@ -95,7 +95,7 @@ def evaluate_boxes(dataset, all_boxes, output_dir, use_matlab=False):
         box_results = _voc_eval_to_box_results(voc_eval)
     elif _use_caltech_evaluator(dataset):
         caltech_eval = caltech_dataset_evaluator.evaluate_boxes(
-            dataset, all_boxes, output_dir, use_matlab=use_matlab
+            dataset, all_boxes, output_dir
         )
         box_results = _caltech_eval_to_box_results(caltech_eval)
     else:
@@ -264,7 +264,7 @@ def _use_voc_evaluator(dataset):
 
 def _use_caltech_evaluator(dataset):
     """Check if the dataset uses the Caltech dataset evaluator."""
-    return False #dataset.name.startswith('caltech')
+    return dataset.name.startswith('caltech')
 
 
 # Indices in the stats array for COCO boxes and masks

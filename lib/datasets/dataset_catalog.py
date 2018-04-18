@@ -41,19 +41,25 @@ DATASETS = {
         IM_DIR:
             _DATA_DIR + '/caltech/caltech_train',
         ANN_FN:
-            _DATA_DIR + '/caltech/annotations/caltech_train_1x.json',
+            _DATA_DIR + '/caltech/json/caltech_train_1x.json',
+        DEVKIT_DIR:
+            _DATA_DIR + '/caltech/devkit'
     },
     'caltech_train_10x':{
         IM_DIR:
             _DATA_DIR + '/caltech/caltech_train',
         ANN_FN:
-            _DATA_DIR + '/caltech/annotations/caltech_train_10x.json',
+            _DATA_DIR + '/caltech/json/caltech_train_10x.json',
+        DEVKIT_DIR:
+            _DATA_DIR + '/caltech/devkit'
     },
     'caltech_test_1x':{
         IM_DIR:
             _DATA_DIR + '/caltech/caltech_test',
         ANN_FN:
-            _DATA_DIR + '/caltech/annotations/caltech_test_1x.json',
+            _DATA_DIR + '/caltech/json/caltech_test_1x.json',
+        DEVKIT_DIR:
+            _DATA_DIR + '/caltech/devkit'
     },
     'cityscapes_fine_instanceonly_seg_train': {
         IM_DIR:
