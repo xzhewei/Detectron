@@ -1,3 +1,4 @@
+METHOD_NAME: e2e-faster-rcnn-R-50-C4-10x
 MODEL:
   TYPE: generalized_rcnn
   CONV_BODY: ResNet.add_ResNet50_conv4_body
