@@ -46,6 +46,7 @@ import datasets.cityscapes_json_dataset_evaluator as cs_json_dataset_evaluator
 import datasets.json_dataset_evaluator as json_dataset_evaluator
 import datasets.voc_dataset_evaluator as voc_dataset_evaluator
 import datasets.caltech_dataset_evaluator as caltech_dataset_evaluator
+import datasets.kaist_dataset_evaluator as kaist_dataset_evaluator
 
 logger = logging.getLogger(__name__)
 
@@ -98,6 +99,11 @@ def evaluate_boxes(dataset, all_boxes, output_dir, use_matlab=False):
             dataset, all_boxes, output_dir
         )
         box_results = _caltech_eval_to_box_results(caltech_eval)
+    elif _use_kaist_evaluator(dataset):
+        kaist_eval = kaist_dataset_evaluator.evaluate_boxes(
+            dataset, all_boxes, output_dir
+        )
+        box_results = _kaist_eval_to_box_results(kaist_eval)
     else:
         raise NotImplementedError(
             'No evaluator for dataset: {}'.format(dataset.name)
@@ -266,6 +272,10 @@ def _use_caltech_evaluator(dataset):
     """Check if the dataset uses the Caltech dataset evaluator."""
     return dataset.name.startswith('caltech')
 
+def _use_kaist_evaluator(dataset):
+    """Check if the dataset uses the KAIST dataset evaluator."""
+    return dataset.name.startswith('kaist')
+
 
 # Indices in the stats array for COCO boxes and masks
 COCO_AP = 0
@@ -329,6 +339,9 @@ def _caltech_eval_to_box_results(caltech_eval):
     # Not supported (return empty results)
     return _empty_box_results()
 
+def _kaist_eval_to_box_results(kaist_eval):
+    # Not supported (return empty results)
+    return _empty_box_results()
 
 def _cs_eval_to_mask_results(cs_eval):
     # Not supported (return empty results)

@@ -61,6 +61,102 @@ DATASETS = {
         DEVKIT_DIR:
             _DATA_DIR + '/caltech/devkit'
     },
+    'kaist_train_all_1x':{
+        IM_DIR:
+            _DATA_DIR + '/kaist/kaist_train_lwir',
+        ANN_FN:
+            _DATA_DIR + '/kaist/json/kaist_train_all_1x.json',
+        DEVKIT_DIR:
+            _DATA_DIR + '/kaist/devkit'
+    },
+    'kaist_train_all_10x':{
+        IM_DIR:
+            _DATA_DIR + '/kaist/kaist_train_lwir',
+        ANN_FN:
+            _DATA_DIR + '/kaist/json/kaist_train_all_10x.json',
+        DEVKIT_DIR:
+            _DATA_DIR + '/kaist/devkit'
+    },
+    'kaist_train_day_1x':{
+        IM_DIR:
+            _DATA_DIR + '/kaist/kaist_train_lwir',
+        ANN_FN:
+            _DATA_DIR + '/kaist/json/kaist_train_day_1x.json',
+        DEVKIT_DIR:
+            _DATA_DIR + '/kaist/devkit'
+    },
+    'kaist_train_day_10x':{
+        IM_DIR:
+            _DATA_DIR + '/kaist/kaist_train_lwir',
+        ANN_FN:
+            _DATA_DIR + '/kaist/json/kaist_train_day_10x.json',
+        DEVKIT_DIR:
+            _DATA_DIR + '/kaist/devkit'
+    },
+    'kaist_train_night_1x':{
+        IM_DIR:
+            _DATA_DIR + '/kaist/kaist_train_lwir',
+        ANN_FN:
+            _DATA_DIR + '/kaist/json/kaist_train_night_1x.json',
+        DEVKIT_DIR:
+            _DATA_DIR + '/kaist/devkit'
+    },
+    'kaist_train_night_10x':{
+        IM_DIR:
+            _DATA_DIR + '/kaist/kaist_train_lwir',
+        ANN_FN:
+            _DATA_DIR + '/kaist/json/kaist_train_night_10x.json',
+        DEVKIT_DIR:
+            _DATA_DIR + '/kaist/devkit'
+    },
+    'kaist_test_all_1x':{
+        IM_DIR:
+            _DATA_DIR + '/kaist/kaist_test_lwir',
+        ANN_FN:
+            _DATA_DIR + '/kaist/json/kaist_test_all_1x.json',
+        DEVKIT_DIR:
+            _DATA_DIR + '/kaist/devkit'
+    },
+    'kaist_test_day_1x':{
+        IM_DIR:
+            _DATA_DIR + '/kaist/kaist_test_lwir',
+        ANN_FN:
+            _DATA_DIR + '/kaist/json/kaist_test_day_1x.json',
+        DEVKIT_DIR:
+            _DATA_DIR + '/kaist/devkit'
+    },
+    'kaist_test_night_1x':{
+        IM_DIR:
+            _DATA_DIR + '/kaist/kaist_test_lwir',
+        ANN_FN:
+            _DATA_DIR + '/kaist/json/kaist_test_night_1x.json',
+        DEVKIT_DIR:
+            _DATA_DIR + '/kaist/devkit'
+    },
+    'scut_train_1x':{
+        IM_DIR:
+            _DATA_DIR + '/scut/scut_train',
+        ANN_FN:
+            _DATA_DIR + '/scut/json/scut_train_1x.json',
+        DEVKIT_DIR:
+            _DATA_DIR + '/scut/devkit'
+    },
+    'scut_train_10x':{
+        IM_DIR:
+            _DATA_DIR + '/scut/scut_train',
+        ANN_FN:
+            _DATA_DIR + '/scut/json/scut_train_10x.json',
+        DEVKIT_DIR:
+            _DATA_DIR + '/scut/devkit'
+    },
+    'scut_test_1x':{
+        IM_DIR:
+            _DATA_DIR + '/scut/scut_test',
+        ANN_FN:
+            _DATA_DIR + '/scut/json/scut_test_1x.json',
+        DEVKIT_DIR:
+            _DATA_DIR + '/scut/devkit'
+    },
     'cityscapes_fine_instanceonly_seg_train': {
         IM_DIR:
             _DATA_DIR + '/cityscapes/images',
