@@ -2,7 +2,7 @@
 # [xzhewei-at-gmail.com]
 # Licensed under The MIT License [see LICENSE for details]
 
-"""Caltech Pedestrian dataset evaluation interface."""
+"""SCUT Pedestrian dataset evaluation interface."""
 
 import logging
 import os
@@ -26,18 +26,18 @@ def evaluate_boxes(
     use_matlab=True
 ):
     res_dir = os.path.join(
-        output_dir, 'caltech_eval', cfg.METHOD_NAME
+        output_dir, 'scut_eval', cfg.METHOD_NAME
     )
     if use_salt:
         res_dir += '_{}'.format(str(uuid.uuid4()))
     
-    _write_caltech_results_files(json_dataset, all_boxes, res_dir)
+    _write_scut_results_files(json_dataset, all_boxes, res_dir)
     #_do_python_eval(json_dataset, salt, output_dir)
     if use_matlab:
         do_matlab_eval(
             json_dataset.name, 
             res_dir, 
-            os.path.join(output_dir, 'caltech_eval'),
+            os.path.join(output_dir, 'scut_eval'),
             )
     if cleanup:
         pass
@@ -46,32 +46,32 @@ def evaluate_boxes(
         #     os.remove(filename)
     return None
 
-def _write_caltech_results_files(json_dataset, all_boxes, res_dir):
-    logger.info(
+def _write_scut_results_files(json_dataset, all_boxes, res_dir):
+    print(
         'Writing bbox results to: {}'.format(os.path.abspath(res_dir)))
     classes = json_dataset.classes
     imgs = json_dataset.COCO.imgs.values()
     img_names = [os.path.splitext(img['file_name'])[0] for img in imgs]
     img_names.sort()
-    pdt.caltech.write_voc_results_file(
+    pdt.scut.write_voc_results_file(
         all_boxes, img_names, res_dir, classes)
     
 def do_matlab_eval(dname, res_dir, output_dir):
     import subprocess
-    logger.info('-----------------------------------------------------')
-    logger.info('Computing results with the official MATLAB eval code.')
-    logger.info('-----------------------------------------------------')
+    print('-----------------------------------------------------')
+    print('Computing results with the official MATLAB eval code.')
+    print('-----------------------------------------------------')
     path = os.path.join(DATASETS[dname][DEVKIT_DIR],'datatool')
     cmd = 'cd {} && '.format(path)
     cmd += '{:s} -nodisplay -nodesktop '.format('matlab')
     cmd += '-r "dbstop if error;'
     cmd += 'startup;'
-    cmd += 'caltech_eval(\'{:s}\',\'{:s}\',\'{:s}\'); quit;"' \
+    cmd += 'scut_eval(\'{:s}\',\'{:s}\',\'{:s}\'); quit;"' \
         .format(
             os.path.abspath(res_dir), 
             os.path.abspath(output_dir), 
             cfg.METHOD_NAME)
-    logger.info('Running:\n{}'.format(cmd))
+    print('Running:\n{}'.format(cmd))
     p = subprocess.Popen(
         cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
         )
@@ -79,10 +79,10 @@ def do_matlab_eval(dname, res_dir, output_dir):
         line = p.stdout.readline()  
         line = line.strip()  
         if line:  
-            logger.info('Subprogram output: [{}]'.format(line))  
+            print('Subprogram output: [{}]'.format(line))  
     if p.returncode == 0:  
-        logger.info('Subprogram success')  
+        print('Subprogram success')  
     else:  
-        logger.info('Subprogram failed') 
+        print('Subprogram failed') 
 
 

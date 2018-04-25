@@ -26,18 +26,18 @@ def evaluate_boxes(
     use_matlab=True
 ):
     res_dir = os.path.join(
-        output_dir, 'caltech_eval', cfg.METHOD_NAME
+        output_dir, 'kaist_eval', cfg.METHOD_NAME
     )
     if use_salt:
         res_dir += '_{}'.format(str(uuid.uuid4()))
     
-    _write_caltech_results_files(json_dataset, all_boxes, res_dir)
+    _write_kaist_results_files(json_dataset, all_boxes, res_dir)
     #_do_python_eval(json_dataset, salt, output_dir)
     if use_matlab:
         do_matlab_eval(
             json_dataset.name, 
             res_dir, 
-            os.path.join(output_dir, 'caltech_eval'),
+            os.path.join(output_dir, 'kaist_eval'),
             )
     if cleanup:
         pass
@@ -46,14 +46,15 @@ def evaluate_boxes(
         #     os.remove(filename)
     return None
 
-def _write_caltech_results_files(json_dataset, all_boxes, res_dir):
+def _write_kaist_results_files(json_dataset, all_boxes, res_dir):
     logger.info(
         'Writing bbox results to: {}'.format(os.path.abspath(res_dir)))
+    pass
     classes = json_dataset.classes
     imgs = json_dataset.COCO.imgs.values()
     img_names = [os.path.splitext(img['file_name'])[0] for img in imgs]
     img_names.sort()
-    pdt.caltech.write_voc_results_file(
+    pdt.kaist.write_voc_results_file(
         all_boxes, img_names, res_dir, classes)
     
 def do_matlab_eval(dname, res_dir, output_dir):
@@ -66,7 +67,7 @@ def do_matlab_eval(dname, res_dir, output_dir):
     cmd += '{:s} -nodisplay -nodesktop '.format('matlab')
     cmd += '-r "dbstop if error;'
     cmd += 'startup;'
-    cmd += 'caltech_eval(\'{:s}\',\'{:s}\',\'{:s}\'); quit;"' \
+    cmd += 'kaist_eval(\'{:s}\',\'{:s}\',\'{:s}\'); quit;"' \
         .format(
             os.path.abspath(res_dir), 
             os.path.abspath(output_dir), 
