@@ -51,6 +51,7 @@ import numpy as np
 import os
 import os.path as osp
 import yaml
+import json
 
 from utils.io import cache_url
 
@@ -1215,3 +1216,17 @@ def _check_and_coerce_cfg_value_type(value_a, value_b, key, full_key):
             'key: {}'.format(type_b, type_a, value_b, value_a, full_key)
         )
     return value_a
+
+def save_to_json(cfg,training=True):
+    if training:
+        outdir = get_output_dir(cfg.TRAIN.DATASETS, training)
+    else:
+        outdir = get_output_dir(cfg.TEST.DATASETS, training)
+    tmp = copy.deepcopy(cfg)
+    tmp['PIXEL_MEANS']=tmp['PIXEL_MEANS'].tolist()[0][0]
+    fname=cfg['METHOD_NAME']
+    if not osp.exists(outdir):
+        os.makedirs(outdir)
+    f = open(os.path.join(outdir,fname+'.json'),'w')
+    json.dump(tmp,f)
+    f.close()

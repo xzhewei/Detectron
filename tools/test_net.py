@@ -35,6 +35,7 @@ from core.config import assert_and_infer_cfg
 from core.config import cfg
 from core.config import merge_cfg_from_file
 from core.config import merge_cfg_from_list
+from core.config import save_to_json
 from core.test_engine import run_inference
 import utils.c2
 import utils.logging
@@ -103,6 +104,7 @@ if __name__ == '__main__':
     assert_and_infer_cfg()
     logger.info('Testing with config:')
     logger.info(pprint.pformat(cfg))
+    save_to_json(cfg,training=False)
 
     while not os.path.exists(cfg.TEST.WEIGHTS) and args.wait:
         logger.info('Waiting for \'{}\' to exist...'.format(cfg.TEST.WEIGHTS))

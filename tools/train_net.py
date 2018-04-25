@@ -35,6 +35,7 @@ from core.config import assert_and_infer_cfg
 from core.config import cfg
 from core.config import merge_cfg_from_file
 from core.config import merge_cfg_from_list
+from core.config import save_to_json
 from core.test_engine import run_inference
 from utils.logging import setup_logging
 import utils.c2
@@ -101,6 +102,7 @@ def main():
     assert_and_infer_cfg()
     logger.info('Training with config:')
     logger.info(pprint.pformat(cfg))
+    save_to_json(cfg,training=True)
     # Note that while we set the numpy random seed network training will not be
     # deterministic in general. There are sources of non-determinism that cannot
     # be removed with a reasonble execution-speed tradeoff (such as certain
