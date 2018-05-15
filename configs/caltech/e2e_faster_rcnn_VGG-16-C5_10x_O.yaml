@@ -1,7 +1,7 @@
-METHOD_NAME: e2e-faster-rcnn-R50-C4-10x-O
+METHOD_NAME: e2e-faster-rcnn-VGG16-C5-10x-O
 MODEL:
   TYPE: generalized_rcnn
-  CONV_BODY: ResNet.add_ResNet50_conv4_body
+  CONV_BODY: VGG16.add_VGG16_conv5_body
   NUM_CLASSES: 5
   FASTER_RCNN: True
 NUM_GPUS: 1
@@ -16,10 +16,10 @@ SOLVER:
 RPN:
   SIZES: (32, 64, 128, 256, 512)
 FAST_RCNN:
-  ROI_BOX_HEAD: ResNet.add_ResNet_roi_conv5_head
+  ROI_BOX_HEAD: VGG16.add_VGG16_roi_fc_head
   ROI_XFORM_METHOD: RoIAlign
 TRAIN:
-  WEIGHTS: https://s3-us-west-2.amazonaws.com/detectron/ImageNetPretrained/MSRA/R-50.pkl
+  WEIGHTS: /home/all/models/Detectron/ImageNetPretrained/vgg16.pkl
   DATASETS: ('caltech_train_10x',)
   SCALES: (480,)
   MAX_SIZE: 640
