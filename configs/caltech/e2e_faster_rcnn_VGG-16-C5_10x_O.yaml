@@ -1,3 +1,4 @@
+# EXP_ID: 20180424D01
 METHOD_NAME: e2e-faster-rcnn-VGG16-C5-10x-O
 MODEL:
   TYPE: generalized_rcnn

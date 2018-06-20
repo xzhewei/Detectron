@@ -1,9 +1,9 @@
-# EXP_ID: 20180421D01
-METHOD_NAME: e2e-faster-rcnn-VGG16-C5-10x
+# EXP_ID: 20180518D03
+METHOD_NAME: e2e-frcnn-VGG16-C5-im1.5-mb256-anchor15
 MODEL:
   TYPE: generalized_rcnn
   CONV_BODY: VGG16.add_VGG16_conv5_body
-  NUM_CLASSES: 5
+  NUM_CLASSES: 7
   FASTER_RCNN: True
 NUM_GPUS: 1
 SOLVER:
@@ -15,22 +15,23 @@ SOLVER:
   MAX_ITER: 180000
   STEPS: [0, 120000, 160000]
 RPN:
-  SIZES: (32, 64, 128, 256, 512)
+  SIZES: (27, 31, 33, 36, 39, 43, 47, 51, 56, 61, 69, 79, 91, 112, 159) #15
+  ASPECT_RATIOS: (2.1739,) # 1/0.46
 FAST_RCNN:
   ROI_BOX_HEAD: VGG16.add_VGG16_roi_fc_head
   ROI_XFORM_METHOD: RoIAlign
 TRAIN:
   WEIGHTS: /home/all/models/Detectron/ImageNetPretrained/vgg16.pkl
-  DATASETS: ('kaist_train_all_10x',)
-  SCALES: (512,)
-  MAX_SIZE: 640
+  DATASETS: ('scut_train_10x',)
+  SCALES: (864,)
+  MAX_SIZE: 1080
   IMS_PER_BATCH: 1
-  BATCH_SIZE_PER_IM: 512
+  BATCH_SIZE_PER_IM: 256
 TEST:
-  DATASETS: ('kaist_test_all_1x',)
-  SCALE: 512
-  MAX_SIZE: 640
+  DATASETS: ('scut_test_1x',)
+  SCALE: 864
+  MAX_SIZE: 1080
   NMS: 0.5
   RPN_PRE_NMS_TOP_N: 6000
   RPN_POST_NMS_TOP_N: 1000
-OUTPUT_DIR: .
+OUTPUT_DIR: output/scut/e2e-frcnn-VGG16-C5-im1.5-mb256-anchor15/detectron-output

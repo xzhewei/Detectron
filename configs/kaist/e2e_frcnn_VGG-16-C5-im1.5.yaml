@@ -1,5 +1,5 @@
-# EXP_ID: 20180421D01
-METHOD_NAME: e2e-faster-rcnn-VGG16-C5-10x
+# EXP_ID: 20180522D01
+METHOD_NAME: e2e-frcnn-VGG16-C5-im1.5
 MODEL:
   TYPE: generalized_rcnn
   CONV_BODY: VGG16.add_VGG16_conv5_body
@@ -22,15 +22,15 @@ FAST_RCNN:
 TRAIN:
   WEIGHTS: /home/all/models/Detectron/ImageNetPretrained/vgg16.pkl
   DATASETS: ('kaist_train_all_10x',)
-  SCALES: (512,)
-  MAX_SIZE: 640
+  SCALES: (768,)
+  MAX_SIZE: 960
   IMS_PER_BATCH: 1
   BATCH_SIZE_PER_IM: 512
 TEST:
   DATASETS: ('kaist_test_all_1x',)
-  SCALE: 512
-  MAX_SIZE: 640
+  SCALE: 768
+  MAX_SIZE: 960
   NMS: 0.5
   RPN_PRE_NMS_TOP_N: 6000
   RPN_POST_NMS_TOP_N: 1000
-OUTPUT_DIR: .
+OUTPUT_DIR: output/kaist/e2e-frcnn-VGG16-C5-im1.5/detectron-output
