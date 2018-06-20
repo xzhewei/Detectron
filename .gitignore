@@ -25,4 +25,5 @@ lib/utils/cython_*.c
 
 output/
 .vscode/
+.idea/
 test/
