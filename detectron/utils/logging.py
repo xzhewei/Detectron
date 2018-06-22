@@ -27,6 +27,8 @@ import logging
 import numpy as np
 import smtplib
 import sys
+import time
+import os
 
 # Print lower precision floating point values than default FLOAT_REPR
 json.encoder.FLOAT_REPR = lambda o: format(o, '.6f')
@@ -79,3 +81,28 @@ def setup_logging(name):
     logging.basicConfig(level=logging.INFO, format=FORMAT, stream=sys.stdout)
     logger = logging.getLogger(name)
     return logger
+
+def setup_logging_file(name,file):
+    FORMAT = '%(levelname)s %(filename)s:%(lineno)4d: %(message)s'
+    logging.root.handlers = []
+    tee = Tee(file+time.strftime('-%Y%m%d', time.localtime())+'.txt','w')
+    logging.basicConfig(level=logging.INFO, format=FORMAT, stream=tee)
+    logger = logging.getLogger(name)
+    return logger
+
+class Tee(object):
+    def __init__(self, name, mode):
+        path, _ = os.path.split(name)
+        if not os.path.exists(path):
+            os.makedirs(path)
+        self.file = open(name, mode)
+        self.stdout = sys.stdout
+        sys.stdout = self
+    def __del__(self):
+        sys.stdout = self.stdout
+        self.file.close()
+    def write(self, data):
+        self.file.write(data)
+        self.stdout.write(data)
+    def flush(self):
+        self.file.flush()

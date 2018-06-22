@@ -952,7 +952,11 @@ __C.MATLAB = b'matlab'
 # Reduce memory usage with memonger gradient blob sharing
 __C.MEMONGER = True
 
+# Method name for evaluation
 __C.METHOD_NAME = b'Detector'
+
+# Experiment ID
+__C.EXP_ID = b''
 
 # Futher reduce memory by allowing forward pass activations to be shared when
 # possible. Note that this will cause activation blob inspection (values,
