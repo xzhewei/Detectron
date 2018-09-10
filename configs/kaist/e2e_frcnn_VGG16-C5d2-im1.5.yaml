@@ -1,0 +1,37 @@
+EXP_ID: 20180701D02
+METHOD_NAME: e2e-frcnn-VGG16-C5d2-im1.5
+MODEL:
+  TYPE: generalized_rcnn
+  CONV_BODY: VGG16.add_VGG16_conv5_dilation_body
+  NUM_CLASSES: 5
+  FASTER_RCNN: True
+NUM_GPUS: 1
+SOLVER:
+  WEIGHT_DECAY: 0.0001
+  LR_POLICY: steps_with_decay
+  BASE_LR: 0.0025
+  GAMMA: 0.1
+  # 1x schedule (note TRAIN.IMS_PER_BATCH: 1)
+  MAX_ITER: 180000
+  STEPS: [0, 120000, 160000]
+RPN:
+  SIZES: (32, 64, 128, 256, 512)
+  STRIDE: 8
+FAST_RCNN:
+  ROI_BOX_HEAD: VGG16.add_VGG16_roi_fc_head
+  ROI_XFORM_METHOD: RoIAlign
+TRAIN:
+  WEIGHTS: /home/all/models/Detectron/ImageNetPretrained/vgg16.pkl
+  DATASETS: ('kaist_train_all_10x',)
+  SCALES: (768,)
+  MAX_SIZE: 960
+  IMS_PER_BATCH: 1
+  BATCH_SIZE_PER_IM: 512
+TEST:
+  DATASETS: ('kaist_test_all_1x',)
+  SCALE: 768
+  MAX_SIZE: 960
+  NMS: 0.5
+  RPN_PRE_NMS_TOP_N: 6000
+  RPN_POST_NMS_TOP_N: 1000
+OUTPUT_DIR: output/kaist/S1-e2e-frcnn-VGG16-C5d2/detectron-output
