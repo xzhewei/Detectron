@@ -90,8 +90,7 @@ def parse_args():
         sys.exit(1)
     return parser.parse_args()
 
-
-if __name__ == '__main__':
+def main():
     workspace.GlobalInit(['caffe2', '--caffe2_log_level=0'])
     logger = setup_logging(__name__)
     args = parse_args()
@@ -116,3 +115,32 @@ if __name__ == '__main__':
         multi_gpu_testing=args.multi_gpu_testing,
         check_expected_results=True,
     )
+
+def main2():
+    workspace.GlobalInit(['caffe2', '--caffe2_log_level=0'])
+    args = parse_args()
+    if args.cfg_file is not None:
+        merge_cfg_from_file(args.cfg_file)
+    if args.opts is not None:
+        merge_cfg_from_list(args.opts)
+    assert_and_infer_cfg()
+    logger = setup_logging(__name__)
+    logger.info('Called with args:')
+    logger.info(args)
+    logger.info('Testing with config:')
+    logger.info(pprint.pformat(cfg))
+    save_to_json(cfg,training=False)
+
+    while not os.path.exists(cfg.TEST.WEIGHTS) and args.wait:
+        logger.info('Waiting for \'{}\' to exist...'.format(cfg.TEST.WEIGHTS))
+        time.sleep(10)
+
+    run_inference(
+        cfg.TEST.WEIGHTS,
+        ind_range=args.range,
+        multi_gpu_testing=args.multi_gpu_testing,
+        check_expected_results=True,
+    )
+
+if __name__ == '__main__':
+    main()
