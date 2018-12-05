@@ -888,6 +888,8 @@ __C.RESNETS.STEM_FUNC = b'basic_bn_stem'
 # ResNet's shortcut function
 __C.RESNETS.SHORTCUT_FUNC = b'basic_bn_shortcut'
 
+# Apply dilation in stage "res4"
+cfg.RESNETS.RES4_DILATION = 1
 # Apply dilation in stage "res5"
 __C.RESNETS.RES5_DILATION = 1
 

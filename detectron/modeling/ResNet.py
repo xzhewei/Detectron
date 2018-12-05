@@ -109,7 +109,8 @@ def add_ResNet_convX_body(model, block_counts):
     if freeze_at == 3:
         model.StopGradient(s, s)
     s, dim_in = add_stage(
-        model, 'res4', s, n3, dim_in, 1024, dim_bottleneck * 4, 1
+        model, 'res4', s, n3, dim_in, 1024, dim_bottleneck * 4,
+        cfg.RESNETS.RES4_DILATION
     )
     if freeze_at == 4:
         model.StopGradient(s, s)
@@ -123,7 +124,7 @@ def add_ResNet_convX_body(model, block_counts):
             model.StopGradient(s, s)
         return s, dim_in, 1. / 32. * cfg.RESNETS.RES5_DILATION
     else:
-        return s, dim_in, 1. / 16.
+        return s, dim_in, 1. / 16. * cfg.RESNETS.RES4_DILATION
 
 
 def add_ResNet_roi_conv5_head(model, blob_in, dim_in, spatial_scale):
