@@ -149,6 +149,8 @@ class GenerateProposalsOp(object):
 
         # Transform anchors into proposals via bbox transformations
         proposals = box_utils.bbox_transform(all_anchors, bbox_deltas, self._reg_weights)
+        # proposals = box_utils.bbox_transform(all_anchors, bbox_deltas,
+        #                                      (1.0,1.0,1.0,1.0))
 
         # 2. clip proposals to image (may result in proposals with zero area
         # that will be removed in the next step)
