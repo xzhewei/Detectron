@@ -45,6 +45,17 @@ def evaluate_boxes(
         #     os.remove(filename)
     return None
 
+def evaluate_roadline(
+    json_dataset,
+    all_lines,
+    output_dir
+):
+    import numpy as np
+    import scipy.io as sio
+    lines = np.argmax(all_lines, 1)
+    mat_file = os.path.join(output_dir,'roadline.mat')
+    sio.savemat(mat_file, {'roadline': lines})
+
 def _write_scut_results_files(json_dataset, all_boxes, res_dir):
     print(
         'Writing bbox results to: {}'.format(os.path.abspath(res_dir)))

@@ -54,7 +54,7 @@ logger = logging.getLogger(__name__)
 
 
 def evaluate_all(
-    dataset, all_boxes, all_segms, all_keyps, output_dir, use_matlab=False
+    dataset, all_boxes, all_segms, all_keyps, all_lines, output_dir, use_matlab=False
 ):
     """Evaluate "all" tasks, where "all" includes box detection, instance
     segmentation, and keypoint detection.
@@ -71,6 +71,10 @@ def evaluate_all(
         results = evaluate_keypoints(dataset, all_boxes, all_keyps, output_dir)
         all_results[dataset.name].update(results[dataset.name])
         logger.info('Evaluating keypoints is done!')
+    if cfg.MODEL.ROADLINE_ON:
+        results = evaluate_roadlines(dataset, all_lines, output_dir)
+        all_results[dataset.name].update(results[dataset.name])
+        logger.info('Evaluating roadlines is done!')
     return all_results
 
 
@@ -166,6 +170,12 @@ def evaluate_keypoints(dataset, all_boxes, all_keyps, output_dir):
     keypoint_results = _coco_eval_to_keypoint_results(coco_eval)
     return OrderedDict([(dataset.name, keypoint_results)])
 
+def evaluate_roadlines(dataset, all_lines, output_dir):
+    logger.info('Evaluating roadlines')
+    if _use_scut_evaluator(dataset):
+        scut_eval = scut_dataset_evaluator.evaluate_roadline(dataset, all_lines,
+                                                             output_dir)
+        lines_results = _scut_eval_to_line_results(scut_eval)
 
 def evaluate_box_proposals(dataset, roidb):
     """Evaluate bounding box object proposals."""
@@ -366,21 +376,37 @@ def _voc_eval_to_box_results(voc_eval):
     # Not supported (return empty results)
     return _empty_box_results()
 
+
 def _caltech_eval_to_box_results(caltech_eval):
     # Not supported (return empty results)
     return _empty_box_results()
 
+
 def _kaist_eval_to_box_results(kaist_eval):
     # Not supported (return empty results)
     return _empty_box_results()
-def _scut_eval_to_box_results(kaist_eval):
+
+
+def _scut_eval_to_box_results(scut_eval):
     # Not supported (return empty results)
     return _empty_box_results()
+
 
 def _cs_eval_to_mask_results(cs_eval):
     # Not supported (return empty results)
     return _empty_mask_results()
 
+
+def _scut_eval_to_line_results(scut_eval):
+    res = _empty_line_results()
+    if scut_eval is None:
+        s = scut_eval.stats
+        # average deviation
+        res['roadline']['AD'] = s[0]
+        res['roadline']['MSE'] = s[1]
+        res['roadline']['DMAX'] = s[2]
+        res['roadline']['DMIN'] = s[3]
+    return res
 
 def _empty_box_results():
     return OrderedDict({
@@ -442,6 +468,20 @@ def _empty_box_proposal_results():
                 ('ARs@1000', -1),
                 ('ARm@1000', -1),
                 ('ARl@1000', -1),
+            ]
+        )
+    })
+
+
+def _empty_line_results():
+    return OrderedDict({
+        'roadline':
+        OrderedDict(
+            [
+                ('AD', -1),
+                ('MSE', -1),
+                ('DMAX', -1),
+                ('DMIN', -1),
             ]
         )
     })

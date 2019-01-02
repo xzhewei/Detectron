@@ -154,13 +154,13 @@ def test_net_on_dataset(
             weights_file, dataset_name, proposal_file, num_images, output_dir
         )
     else:
-        all_boxes, all_segms, all_keyps = test_net(
+        all_boxes, all_segms, all_keyps, all_lines = test_net(
             weights_file, dataset_name, proposal_file, output_dir, gpu_id=gpu_id
         )
     test_timer.toc()
     logger.info('Total inference time: {:.3f}s'.format(test_timer.average_time))
     results = task_evaluation.evaluate_all(
-        dataset, all_boxes, all_segms, all_keyps, output_dir
+        dataset, all_boxes, all_segms, all_keyps, all_lines, output_dir
     )
     return results
 
@@ -234,7 +234,8 @@ def test_net(
     model = initialize_model_from_cfg(weights_file, gpu_id=gpu_id)
     num_images = len(roidb)
     num_classes = cfg.MODEL.NUM_CLASSES
-    all_boxes, all_segms, all_keyps = empty_results(num_classes, num_images)
+    all_boxes, all_segms, all_keyps, all_lines = \
+        empty_results(num_classes, num_images)
     timers = defaultdict(Timer)
     for i, entry in enumerate(roidb):
         if cfg.TEST.PRECOMPUTED_PROPOSALS:
@@ -253,7 +254,7 @@ def test_net(
 
         im = cv2.imread(entry['image'])
         with c2_utils.NamedCudaScope(gpu_id):
-            cls_boxes_i, cls_segms_i, cls_keyps_i = im_detect_all(
+            cls_boxes_i, cls_segms_i, cls_keyps_i, cls_lines_i = im_detect_all(
                 model, im, box_proposals, timers
             )
 
@@ -262,6 +263,8 @@ def test_net(
             extend_results(i, all_segms, cls_segms_i)
         if cls_keyps_i is not None:
             extend_results(i, all_keyps, cls_keyps_i)
+        if cls_lines_i is not None:
+            all_lines[i] = cls_lines_i
 
         if i % 10 == 0:  # Reduce log file size
             ave_total_time = np.sum([t.average_time for t in timers.values()])
@@ -270,7 +273,8 @@ def test_net(
             det_time = (
                 timers['im_detect_bbox'].average_time +
                 timers['im_detect_mask'].average_time +
-                timers['im_detect_keypoints'].average_time
+                timers['im_detect_keypoints'].average_time +
+                timers['im_detect_roadline'].average_time
             )
             misc_time = (
                 timers['misc_bbox'].average_time +
@@ -313,11 +317,12 @@ def test_net(
             all_boxes=all_boxes,
             all_segms=all_segms,
             all_keyps=all_keyps,
-            cfg=cfg_yaml
+            cfg=cfg_yaml,
+            all_lines=all_lines
         ), det_file
     )
     logger.info('Wrote detections to: {}'.format(os.path.abspath(det_file)))
-    return all_boxes, all_segms, all_keyps
+    return all_boxes, all_segms, all_keyps, all_lines
 
 
 def initialize_model_from_cfg(weights_file, gpu_id=0):
@@ -383,7 +388,8 @@ def empty_results(num_classes, num_images):
     all_boxes = [[[] for _ in range(num_images)] for _ in range(num_classes)]
     all_segms = [[[] for _ in range(num_images)] for _ in range(num_classes)]
     all_keyps = [[[] for _ in range(num_images)] for _ in range(num_classes)]
-    return all_boxes, all_segms, all_keyps
+    all_lines = [[] for _ in range(num_images)]
+    return all_boxes, all_segms, all_keyps, all_lines
 
 
 def extend_results(index, all_res, im_res):

@@ -105,8 +105,18 @@ def im_detect_all(model, im, box_proposals, timers=None):
     else:
         cls_keyps = None
 
-    return cls_boxes, cls_segms, cls_keyps
+    if cfg.MODEL.ROADLINE_ON:
+        timers['im_detect_roadline'].tic()
+        cls_lines = im_detect_roadline(model, im_scale)
+        timers['im_detect_roadline'].toc()
+    else:
+        cls_lines = None
 
+    return cls_boxes, cls_segms, cls_keyps, cls_lines
+
+def im_detect_roadline(model, im_scale):
+    roadline_prob = workspace.FetchBlob(core.ScopedName('roadline_cls_prob')).squeeze()
+    return roadline_prob
 
 def im_conv_body_only(model, im, target_scale, target_max_size):
     """Runs `model.conv_body_net` on the given image `im`."""
