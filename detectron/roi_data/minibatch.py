@@ -37,6 +37,7 @@ import detectron.roi_data.fast_rcnn as fast_rcnn_roi_data
 import detectron.roi_data.retinanet as retinanet_roi_data
 import detectron.roi_data.rpn as rpn_roi_data
 import detectron.utils.blob as blob_utils
+import detectron.roi_data.roadnet as roadnet_roi_data
 
 logger = logging.getLogger(__name__)
 
@@ -52,10 +53,15 @@ def get_minibatch_blob_names(is_training=True):
     elif cfg.RETINANET.RETINANET_ON:
         blob_names += retinanet_roi_data.get_retinanet_blob_names(
             is_training=is_training
-        )
+        ) # TODO: add roadline minibatch_blob_name
     else:
         # Fast R-CNN like models trained on precomputed proposals
         blob_names += fast_rcnn_roi_data.get_fast_rcnn_blob_names(
+            is_training=is_training
+        )
+    if cfg.MODEL.ROADLINE_ON:
+        # roadline predict
+        blob_names += roadnet_roi_data.get_roadnet_blob_names(
             is_training=is_training
         )
     return blob_names
@@ -69,6 +75,7 @@ def get_minibatch(roidb):
     # Get the input image blob, formatted for caffe2
     im_blob, im_scales = _get_image_blob(roidb)
     blobs['data'] = im_blob
+
     if cfg.RPN.RPN_ON:
         # RPN-only or end-to-end Faster/Mask R-CNN
         valid = rpn_roi_data.add_rpn_blobs(blobs, im_scales, roidb)
@@ -83,6 +90,12 @@ def get_minibatch(roidb):
     else:
         # Fast R-CNN like models trained on precomputed proposals
         valid = fast_rcnn_roi_data.add_fast_rcnn_blobs(blobs, im_scales, roidb)
+
+    if cfg.MODEL.ROADLINE_ON:
+        # roadline predict
+        valid = valid and \
+                roadnet_roi_data.get_roadnet_blobs(blobs, im_scales, roidb)
+
     return blobs, valid
 
 

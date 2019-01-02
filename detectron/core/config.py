@@ -485,6 +485,8 @@ __C.MODEL.RPN_ONLY = False
 # Use 'prof_dag' to get profiling statistics
 __C.MODEL.EXECUTION_TYPE = 'dag'
 
+# Indicates the model makes road line predictions
+__C.MODEL.ROADLINE_ON = False
 
 # ---------------------------------------------------------------------------- #
 # RetinaNet options
@@ -907,6 +909,11 @@ __C.GROUP_NORM.NUM_GROUPS = 32
 # GroupNorm's small constant in the denominator
 __C.GROUP_NORM.EPSILON = 1e-5
 
+# ---------------------------------------------------------------------------- #
+# RoadNet options
+# ---------------------------------------------------------------------------- #
+__C.ROADNET = AttrDict()
+__C.ROADNET.ROADNET_ON = False
 
 # ---------------------------------------------------------------------------- #
 # Misc options

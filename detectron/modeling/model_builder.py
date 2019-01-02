@@ -99,6 +99,8 @@ def retinanet(model):
     # TODO(rbg): fold into build_generic_detection_model
     return build_generic_retinanet_model(model, get_func(cfg.MODEL.CONV_BODY))
 
+def roadnet(model):
+    return build_generic_roadline_model(model, get_func(cfg.MODEL.CONV_BODY))
 
 # ---------------------------------------------------------------------------- #
 # Helper functions for building various re-usable network bits
@@ -181,6 +183,7 @@ def build_generic_detection_model(
             'box': None,
             'mask': None,
             'keypoints': None,
+            'roadline': None,
         }
 
         if cfg.RPN.RPN_ON:
@@ -215,6 +218,11 @@ def build_generic_detection_model(
             head_loss_gradients['keypoint'] = _add_roi_keypoint_head(
                 model, add_roi_keypoint_head_func, blob_conv, dim_conv,
                 spatial_scale_conv
+            )
+
+        if cfg.MODEL.ROADLINE_ON:
+            head_loss_gradients['roadline'] = _add_roadline_head(
+                model, blob_conv, dim_conv, spatial_scale_conv
             )
 
         if model.train:
@@ -319,6 +327,36 @@ def _add_roi_keypoint_head(
     else:
         loss_gradients = keypoint_rcnn_heads.add_keypoint_losses(model)
     return loss_gradients
+
+def _add_roadline_head(model, blob_in, dim_in, spatial_scale_in):
+    import detectron.modeling.road_heads as road_heads
+    road_heads.add_road_outputs(model, blob_in, dim_in, spatial_scale_in)
+    if model.train:
+        loss_gradients = road_heads.add_road_losses(model)
+    else:
+        loss_gradients = None
+    return loss_gradients
+
+
+def build_generic_roadline_model(model, add_conv_body_func):
+    """
+    Build a model with road line predict branch
+    :param model:
+    :param add_conv_body_func:
+    :return:
+    """
+    import detectron.modeling.road_heads as road_heads
+    def _single_gpu_build_func(model):
+        blob, dim, spatial_scale = add_conv_body_func(model)
+        if not model.train:
+            model.conv_body_net = model.net.Clone('conv_body_net')
+        road_heads.add_road_outputs(model, blob, dim, spatial_scale)
+        if model.train:
+            loss_gradients = road_heads.add_road_losses(model)
+        return loss_gradients if model.train else None
+
+    optim.build_data_parallel_model(model, _single_gpu_build_func)
+    return model
 
 
 def build_generic_rfcn_model(model, add_conv_body_func, dim_reduce=None):

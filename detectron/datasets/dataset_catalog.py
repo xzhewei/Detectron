@@ -321,6 +321,30 @@ _DATASETS = {
             _DATA_DIR + '/scut/json/scut_test_1x.json',
         _DEVKIT_DIR:
             _DATA_DIR + '/scut/devkit'
+    },
+    'scut_train_1x_roadline':{
+        _IM_DIR:
+            _DATA_DIR + '/scut/scut_train',
+        _ANN_FN:
+            _DATA_DIR + '/scut/json/scut_train_1x_roadline.json',
+        _DEVKIT_DIR:
+            _DATA_DIR + '/scut/devkit'
+    },
+    'scut_train_10x_roadline':{
+        _IM_DIR:
+            _DATA_DIR + '/scut/scut_train',
+        _ANN_FN:
+            _DATA_DIR + '/scut/json/scut_train_10x_roadline.json',
+        _DEVKIT_DIR:
+            _DATA_DIR + '/scut/devkit'
+    },
+    'scut_test_1x_roadline':{
+        _IM_DIR:
+            _DATA_DIR + '/scut/scut_test',
+        _ANN_FN:
+            _DATA_DIR + '/scut/json/scut_test_1x_roadline.json',
+        _DEVKIT_DIR:
+            _DATA_DIR + '/scut/devkit'
     }
 }
 

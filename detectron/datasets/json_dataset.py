@@ -157,6 +157,9 @@ class JsonDataset(object):
         for k in ['date_captured', 'url', 'license', 'file_name']:
             if k in entry:
                 del entry[k]
+        # Anno contains roadline
+        if 'roadline' in entry:
+            entry['roadline'] = int(entry['roadline'])
 
     def _add_gt_annotations(self, entry):
         """Add ground truth annotation metadata to an roidb entry."""
