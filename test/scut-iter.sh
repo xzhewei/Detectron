@@ -1,6 +1,7 @@
+export CUDA_VISIBLE_DEVICES=3
 dataset=scut
-GPU=S2
-method_name=e2e-frcnn-VGG16-C5-anchor9
+GPU=S0_G3
+method_name=e2e_frcnn_VGG16-C5_im1.5
 
 output_dir=output/${dataset}/${GPU}-${method_name}/detectron-output
 train_dir=${output_dir}/train/scut_train_10x/generalized_rcnn

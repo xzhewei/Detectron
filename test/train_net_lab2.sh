@@ -1,6 +1,6 @@
 export CUDA_VISIBLE_DEVICES=3
 dataset=scut
-GPU=S0_G3
+GPU=S2_G3
 method_name=e2e_frcnn_VGG16-C5d2-im1.5
 
 NUM_GPUS=1
